@@ -1,104 +1,99 @@
+/*
+ * 功能：合并两个用链表表示的多项式，默认多项式为指数从大到小的顺序。
+ *
+ * 作者：孙明琦
+ *
+ * 代码片段，直接提交函数部分即可
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+typedef struct Node *PtrToNode;
 struct Node {
     int Coefficient;
     int Exponent;
-    struct Node *Next;
+    PtrToNode Next;
 };
-typedef struct Node *Polynomial;
+typedef PtrToNode Polynomial;
 
-Polynomial Read()
-{
-    int n, i;
-    Polynomial t, s = NULL;
-   
-    scanf("%d", &n);
-    for (i = 0; i < n; i++) {
-        t = malloc(sizeof(struct Node));
-        t->Next = s;
-        scanf("%d%d", &t->Coefficient, &t->Exponent);
-        s = t;
-    }
-
-    return s;
-}
-
-void Print(Polynomial p)
-{
-    if (p == NULL)
-        return;
-    Print(p->Next);
-    if (p->Next != NULL)
-        printf(" ");
-    printf("%d %d", p->Coefficient, p->Exponent);
-}
-
-Polynomial Add(Polynomial a, Polynomial b)
-{
-    Polynomial s = NULL, t, h = NULL;
-
-    while (!(a==NULL||b==NULL)) {
-        t = malloc(sizeof(struct Node));
-        if (a->Exponent == b->Exponent) {
-            t->Exponent = a->Exponent;
-            t->Coefficient = a->Coefficient + b->Coefficient;
-            a = a->Next;
-            b = b->Next;
-        } else if (a->Exponent < b->Exponent) {
-            memcpy(t, a, sizeof(struct Node));
-            a = a->Next;
-        } else {
-            memcpy(t, b, sizeof(struct Node));
-            b = b->Next;
-        }
-        if (t->Coefficient == 0) {
-            free(t);
-            continue;
-        }
-        if (h != NULL)
-            h->Next = t;
-        else
-            s = t;
-        h = t;
-    }
-    while (a!=NULL) {
-        t = malloc(sizeof(struct Node));
-        memcpy(t, a, sizeof(struct Node));
-        a = a->Next;
-        if (h != NULL)
-            h->Next = t;
-        else
-            s = t;
-        h = t;
-    
-    }
-    while (b!=NULL) {
-        t = malloc(sizeof(struct Node));
-        memcpy(t, b, sizeof(struct Node));
-        b = b->Next;
-        if (h != NULL)
-            h->Next = t;
-        else
-            s = t;
-        h = t;    
-    }
-    if (h == NULL)
-        return NULL;
-    h->Next = NULL;
-    return s;
-}
+Polynomial Read(); /* details omitted */
+void Print( Polynomial p ); /* details omitted */
+Polynomial Add( Polynomial a, Polynomial b );
 
 int main()
 {
     Polynomial a, b, s;
-    
     a = Read();
     b = Read();
     s = Add(a, b);
     Print(s);
-    printf("\n");
-
     return 0;
 }
 
+/* Your function will be put here */
+
+/* 题目约定：链表的第一个节点为哨兵节点，并不储存有意义的数据 */
+
+Polynomial Add(Polynomial a, Polynomial b)
+{
+    Polynomial result = calloc(1, sizeof(struct Node));
+    Polynomial head = result;
+
+    a = a->Next;
+    b = b->Next;
+    while (1)
+    {
+        if (a == 0 && b == 0)
+        {
+            return head;
+        }
+        else if (a == 0 || b == 0)
+        {
+            struct Node* nodeRemain;
+            if (a == NULL)
+            {
+                nodeRemain = b;
+            }
+            else
+            {
+                nodeRemain = a;
+            }
+            result->Next = nodeRemain;
+            a = NULL;
+            b = NULL;
+        }
+        else
+        {
+            while (a && b && a->Exponent > b->Exponent)
+            {
+                struct Node* nodePrev = a;
+                a = a->Next;
+                result->Next = nodePrev;
+                result = result->Next;
+                result->Next = NULL;
+            }
+            while (a && b && b->Exponent > a->Exponent)
+            {
+                struct Node* nodePrev = b;
+                b = b->Next;
+                result->Next = nodePrev;
+                result = result->Next;
+                result->Next = NULL;
+            }
+            while (a && b && a->Exponent == b->Exponent)
+            {
+                if (a->Coefficient + b->Coefficient != 0)
+                {
+                    struct Node* newNode = calloc(1, sizeof(struct Node));
+                    newNode[0] = b[0];
+                    newNode->Coefficient += a->Coefficient;
+                    newNode->Next = NULL;
+                    result->Next = newNode;
+                    result = result->Next;
+                }
+                b = b->Next;
+                a = a->Next;
+            }
+        }
+    }
+}
