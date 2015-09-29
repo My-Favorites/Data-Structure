@@ -1,3 +1,12 @@
+/*
+ * 功能：用一条数组实现的两个stack
+ *
+ * 作者：孙明琦
+ *
+ * 代码片段，直接提交函数部分即可
+ */
+
+
 Stack CreateStack(int MaxElements)
 {
 	Stack stack = malloc(sizeof(*stack));

@@ -1,3 +1,11 @@
+/*
+ * 功能：deque数据结构的函数封装
+ *
+ * 作者：孙明琦
+ *
+ * 代码片段，直接提交函数部分即可
+ */
+
 Deque CreateDeque()
 {
     Deque deque = malloc(sizeof(*deque));

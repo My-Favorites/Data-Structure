@@ -1,3 +1,11 @@
+/*
+ * 功能：后缀表达式求值，只包含+-/*
+ *
+ * 作者：孙明琦
+ *
+ * 代码片段，直接提交函数部分即可
+ */
+
 ElementType EvalPostfix(char *expr)
 {
     double operand[Max_Expr * 4] = {0};
