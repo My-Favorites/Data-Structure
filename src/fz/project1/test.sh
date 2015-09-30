@@ -7,6 +7,7 @@ function testCode {
     echo -n ">> $1"
     gcc $2 test.c -std=c99 -o a.out
     ./a.out
+    echo
 }
 
 testCode "O(n^6)" on6.c
