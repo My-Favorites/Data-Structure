@@ -5,19 +5,20 @@ int findMaxSubMatrixSum(int n, int matrix[n][n]) {
     int tmp;
     for (int x = 0; x < n; x++) {
         for (int y = 0; y < n; y++) {
-            for (int w = 1; (x + w) <= n; w++) {
-                tmp = 0;
-                for (int h = 1; (y + h) <= n; h++) {
-                    tmp += matrix[w][h];
+            tmp = 0;
+            for (int offsetX = 0; (x + offsetX) < n; offsetX++) {
+                for (int offsetY = 0; (y + offsetY) < n; offsetY++) {
+                    tmp += matrix[y+offsetY][x+offsetX];
+                    printf("\ntmp: %d", tmp);
+                    max = max > tmp ? max : tmp;
                 }
-                max = max > tmp ? max : tmp;
             }
         }
     }
     return max;
 }
 
-void main() {
+int main() {
     int matrix[4][4] = {
             {0,  -2, -7, 0},
             {9,  2,  -6, 2},
@@ -26,4 +27,5 @@ void main() {
     };
     int max = findMaxSubMatrixSum(4, matrix);
     printf("Max sub matrix sum: %d", max);
+    return 0;
 }
