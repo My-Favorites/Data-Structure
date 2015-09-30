@@ -11,3 +11,5 @@ password: student_id
 - [Peer Review](http://ds.z-mou.com/)  
 username: student_id  
 pasword: student_id  
+
+Note: PPT and 2E can be downloaded at ituring.com.cn: http://www.ituring.com.cn/book/685

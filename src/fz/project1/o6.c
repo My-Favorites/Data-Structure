@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-
-
 int calculateSubMatrixSum(int n, int matrix[n][n], int x, int y, int w, int h) {
     int sum = 0;
     for (int i = x; i < (x + w); i++) {
