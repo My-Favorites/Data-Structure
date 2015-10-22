@@ -64,9 +64,9 @@ int main()
 
 Deque CreateDeque()
 {
-    Deque deque = malloc(sizeof(*deque));
+    Deque deque = (Deque)malloc(sizeof(*deque));
 
-    deque->Front = deque->Rear = malloc(sizeof(*deque->Front));
+    deque->Front = deque->Rear = (PtrToNode)malloc(sizeof(*deque->Front));
     deque->Front->Next = deque->Front->Last = NULL;
 
     return deque;
@@ -79,7 +79,7 @@ int IsEmpty(Deque D)
 
 int Push(ElementType X, Deque D)
 {
-    PtrToNode p = malloc(sizeof(*p));
+    PtrToNode p = (PtrToNode)malloc(sizeof(*p));
 
     p->Element = X;
     p->Next = D->Front->Next;
@@ -114,7 +114,7 @@ ElementType Pop(Deque D)
 
 int Inject(ElementType X, Deque D)
 {
-    PtrToNode p = malloc(sizeof(*p));
+    PtrToNode p = (PtrToNode)malloc(sizeof(*p));
 
     p->Element = X;
     p->Next = NULL;

@@ -57,12 +57,12 @@ int main()
 
 Stack CreateStack(int MaxElements)
 {
-    Stack stack = malloc(sizeof(*stack));
+    Stack stack = (Stack)malloc(sizeof(*stack));
 
     stack->Capacity = MaxElements;
     stack->Top1 = 0;
     stack->Top2 = MaxElements - 1;
-    stack->Array = malloc(MaxElements * sizeof(ElementType));
+    stack->Array = (ElementType *)malloc(MaxElements * sizeof(ElementType));
 
     return stack;
 }
