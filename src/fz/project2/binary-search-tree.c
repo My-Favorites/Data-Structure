@@ -25,7 +25,32 @@ BST insert(int x, BST T) {
     return T;
 }
 
+int compare(BST source, BST target) {
+    return 0;
+}
+
+BST source;
+BST current;
+
 int main() {
+    int n;
+    int l;
+    int input;
+    for (;;) {
+        scanf("%d%d", &n, &l);
+        if (n == 0) {
+            break;
+        }
+        source = NULL;
+        for (int i = 0; i < l; i++) {
+            current = NULL;
+            for (int j = 0; j < n; j++) {
+                scanf("%d", &input);
+                insert(input, i == 0 ? source : current);
+            }
+            compare(source, target);
+        }
+    }
     printf("Hello, World!");
     return 0;
 }
