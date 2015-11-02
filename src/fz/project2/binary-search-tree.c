@@ -44,23 +44,19 @@ BST source;
 BST target;
 
 int main() {
-    int n;
-    int l;
-    int input;
+    int n, l, input, i, j;
     for (;;) {
         scanf("%d", &n);
         if (n == 0) break;
-        scanf("%l", &l);
-        printf("N: %d, L: %d", n, l);
+        scanf("%d", &l);
         source = NULL;
-        for (int i = 0; i < l; i++) {
+        for (i = 0; i <= l; i++) {
             target = NULL;
-            for (int j = 0; j < n; j++) {
+            for (j = 0; j < n; j++) {
                 scanf("%d", &input);
-                // Create BST based on current index and input
-                insert(input, i == 0 ? source : target);
+                insert(input, i == 0 ? source : target); // Create BST based on current index and input
             }
-            printf(compare(source, target) ? "Yes\n" : "No\n");
+            i > 0 && printf(compare(source, target) ? "Yes\n" : "No\n");
         }
     }
     return 0;
