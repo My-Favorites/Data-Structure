@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc binary-search-tree.c && ./a.out
+gcc -std=c99 binary-search-tree.c && ./a.out
