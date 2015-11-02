@@ -27,14 +27,14 @@ BST insert(int x, BST T) {
 
 int compare(BST source, BST target) {
     if (!source || !target) { // If one of BST is NULL
-        if (!source && !target) { // If both is NULL
+        if (!source && !target) { // If both are NULL
             return 1;
         }
         return 0;
     }
     if (!compare(source->Left, target->Left) ||
         !compare(source->Right, target->Right) ||
-        source->Element != source->Element) {
+        source->Element != target->Element) {
         return 0;
     }
     return 1;
@@ -54,9 +54,13 @@ int main() {
             target = NULL;
             for (j = 0; j < n; j++) {
                 scanf("%d", &input);
-                insert(input, i == 0 ? source : target); // Create BST based on current index and input
+                target = insert(input, target); // Create BST based on input
             }
-            i > 0 && printf(compare(source, target) ? "Yes\n" : "No\n");
+            if (i == 0) {
+                source = target;
+            } else {
+                printf(compare(source, target) ? "Yes\n" : "No\n");
+            }
         }
     }
     return 0;
