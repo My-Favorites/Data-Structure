@@ -37,15 +37,15 @@ int main() {
     int l;
     int input;
     for (;;) {
-        scanf("%d%d", &n, &l);
-        if (n == 0) {
-            break;
-        }
+        scanf("%d", &n);
+        if (n == 0) break;
+        scanf("%l", &l);
         source = NULL;
         for (int i = 0; i < l; i++) {
             current = NULL;
             for (int j = 0; j < n; j++) {
                 scanf("%d", &input);
+                // Create BST based on current index and input
                 insert(input, i == 0 ? source : current);
             }
             compare(source, target);
