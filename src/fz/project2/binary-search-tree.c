@@ -51,6 +51,7 @@ int main() {
         scanf("%d", &n);
         if (n == 0) break;
         scanf("%l", &l);
+        printf("N: %d, L: %d", n, l);
         source = NULL;
         for (int i = 0; i < l; i++) {
             target = NULL;
