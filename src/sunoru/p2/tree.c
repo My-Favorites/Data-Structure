@@ -4,13 +4,13 @@
 #define MAXN 10
 
 typedef int ElementType;
-
 typedef struct TreeNode *Tree;
 struct TreeNode {
     ElementType Element;
     Tree Left;
     Tree Right;
 };
+
 Tree insert(int x, Tree T);
 int compare(Tree T1, Tree T2);
 void dispose(Tree T);
