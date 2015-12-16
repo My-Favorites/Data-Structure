@@ -1,10 +1,26 @@
-/*
- * 功能：后缀表达式求值，只包含+-/*
- *
- * 作者：孙明琦
- *
- * 代码片段，直接提交函数部分即可
- */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef double ElementType;
+#define Infinity 1e8
+#define Max_Expr 30   /* max size of expression */
+
+ElementType EvalPostfix( char *expr );
+
+int main()
+{
+    ElementType v;
+    char expr[Max_Expr];
+    gets(expr);
+    v = EvalPostfix( expr );
+    if ( v < Infinity )
+        printf("%f\n", v);
+    else
+        printf("ERROR\n");
+    return 0;
+}
+
+/* Your function will be put here */
 
 ElementType EvalPostfix(char *expr)
 {
