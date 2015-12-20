@@ -27,30 +27,36 @@ struct Number
     int hash; // hash of this number
 };
 
-std::deque<Number> pendingNumbers; // bigger numbers will have lower indexes
-std::deque<Number> rejectedNumbers; // bigger numbers will have lower indexes
-std::deque<Number> inputSequence;
-
-int positionIsTaken[1000];
+std::deque<Number> pendingNumbers; // pending numbers to be tested, bigger numbers will have lower indexes
+std::deque<Number> rejectedNumbers; // numbers that were rejected before, bigger numbers will have lower indexes
+std::deque<Number> inputSequence; // original input sequence
+int positionIsTaken[1000]; // whether target position is being taken, 1 => taken, 0 => empty
 
 /**
- * Tell whether all dependencies are met for given number
+ * Tell whether all dependencies are met for given number to be pushed to inputSequence
  *
  * @param {Number} number - Number
- * @returns {bool} if true, that number is ready to be inserted to inputNumbers
+ * @returns {bool} if true, that number is ready to be pushed to inputSequence
  */
 bool isDependenciesMet (Number number)
 {
     int hash = number.hash;
     int index = number.index;
     int i;
+
     if (index > hash) {
+        // If index is greater than hash,
+        // then the number must be inserted after all numbers of [hash, index) ready.
+        // Otherwise, we reject.
         for (i = hash; i < index; ++i) {
             if (positionIsTaken[i] == 0) {
                 return false;
             }
         }
     } else if (index < hash) {
+        // If index is lower than hash,
+        // then the number must be inserted after all numbers of [hash, N) and [0, index) ready.
+        // Otherwise, we reject.
         for (i = hash; i % N != index; ++i) {
             if (positionIsTaken[i % N] == 0) {
                 return false;
@@ -62,11 +68,18 @@ bool isDependenciesMet (Number number)
 }
 
 
+/**
+ * Compare 2 Numbers based on number.value,
+ * bigger numbers will have lower indexes
+ */
 bool compareNumber (Number i, Number j)
 {
     return i.value > j.value;
 }
 
+/**
+ * Print Number Deque (joined by space)
+ */
 void printNumberDeque (std::deque<Number> numbers) {
     for (int i = 0; i != numbers.size(); i++) {
         if (i > 0) {
@@ -80,8 +93,10 @@ void printNumberDeque (std::deque<Number> numbers) {
 int main()
 {
 
+    // Read N
     scanf("%d", &N);
 
+    // Init pending numbers
     int val;
     for (int i = 0; i < N; ++i) {
         scanf("%d", &val);
@@ -94,8 +109,18 @@ int main()
         }
     }
 
+    // Sort pending numbers
     std::sort(pendingNumbers.begin(), pendingNumbers.end(), compareNumber);
 
+    // How it works:
+    //
+    // At first we have all valid numbers in pendingNumbers and rejectedNumbers is empty.
+    // Then we while pendingNumbers is not empty
+    //     we check if all dependencies of current smallest number in pendingNumbers met.
+    //     If so, we push it to inputSequence.
+    //         And for each number in rejectedNumbers, we check it.
+    //         And recheck it until rejectedNumbers's size no longer changes.
+    //     If not, we push it to rejectNumbers;
     int j = 0;
     while (pendingNumbers.size() > 0) {
         j++;
@@ -108,6 +133,8 @@ int main()
             while (true) {
 
                 std::deque<Number>::size_type sizeBefore = rejectedNumbers.size();
+
+                // check all rejectedNumbers
                 for (int i = sizeBefore - 1; i > -1; --i) {
                     num = rejectedNumbers[i];
 
@@ -118,6 +145,8 @@ int main()
                     }
                 }
                 std::deque<Number>::size_type sizeAfter = rejectedNumbers.size();
+
+                // size not changed, no need to do another round of recheck
                 if (sizeAfter == sizeBefore) {
                     break;
                 }
