@@ -13,7 +13,7 @@
  */
 
 #include <algorithm>
-#include <vector>
+#include <deque>
 #include <iostream>
 #include <cstdio>
 
@@ -27,11 +27,11 @@ struct Number
     int hash; // hash of this number
 };
 
-std::vector<Number> pendingNumbers;
-std::vector<Number> rejectedNumbers;
-std::vector<Number> inputSequence;
+std::deque<Number> pendingNumbers; // bigger numbers will have lower indexes
+std::deque<Number> rejectedNumbers; // bigger numbers will have lower indexes
+std::deque<Number> inputSequence;
 
-bool positionIsTaken[1000];
+int positionIsTaken[1000];
 
 /**
  * Tell whether all dependencies are met for given number
@@ -46,13 +46,13 @@ bool isDependenciesMet (Number number)
     int i;
     if (index > hash) {
         for (i = hash; i < index; ++i) {
-            if (!positionIsTaken[i]) {
+            if (positionIsTaken[i] == 0) {
                 return false;
             }
         }
     } else if (index < hash) {
         for (i = hash; i % N != index; ++i) {
-            if (!positionIsTaken[i % N]) {
+            if (positionIsTaken[i % N] == 0) {
                 return false;
             }
         }
@@ -64,14 +64,13 @@ bool isDependenciesMet (Number number)
 
 bool compareNumber (Number i, Number j)
 {
-    return i.value < j.value;
+    return i.value > j.value;
 }
 
-void printNumberVector (std::vector<Number> numbers) {
-    for (std::vector<Number>::size_type i = 0; i != numbers.size(); i++) {
+void printNumberDeque (std::deque<Number> numbers) {
+    for (int i = 0; i != numbers.size(); i++) {
         std::cout << numbers[i].value << " ";
     }
-
     std::cout << std::endl;
 }
 
@@ -94,6 +93,49 @@ int main()
 
     std::sort(pendingNumbers.begin(), pendingNumbers.end(), compareNumber);
 
-    printNumberVector(pendingNumbers);
+    int j = 0;
+    while (pendingNumbers.size() > 0) {
+        j++;
+        printf("j: %d, ps: %d, rs: %d\n", j, pendingNumbers.size(), rejectedNumbers.size());
+        Number num = pendingNumbers.back();
+        pendingNumbers.pop_back();
+        if (isDependenciesMet(num)) {
+            inputSequence.push_back(num);
+            positionIsTaken[num.index] = 1; // mark as taken
+            // dependencies has changed for rejected numbers, recheck
+            while (true) {
+
+                std::deque<Number>::size_type sizeBefore = rejectedNumbers.size();
+                for (int i = sizeBefore - 1; i > -1; --i) {
+                    num = rejectedNumbers[i];
+
+                    std::cout << std::endl << std::endl;
+
+                    std::cout << "inputSequence: " << std::endl;
+                    printNumberDeque(inputSequence);
+
+                    std::cout << "rejectedNumbers: " << std::endl;
+                    printNumberDeque(rejectedNumbers);
+
+                    if (isDependenciesMet(num)) {
+                        printf("found");
+                        inputSequence.push_back(num);
+                        positionIsTaken[num.index] = 1; // mark as taken
+                        rejectedNumbers.erase(rejectedNumbers.begin() + i);
+                    }
+                }
+                std::deque<Number>::size_type sizeAfter = rejectedNumbers.size();
+                printf("sizeBefore: %d, sizeAfter: %d\n", sizeBefore, sizeAfter);
+                if (sizeAfter == sizeBefore) {
+                    break;
+                }
+            }
+        } else {
+            rejectedNumbers.push_front(num);
+        }
+    }
+
+    printNumberDeque(inputSequence);
+
     return 0;
 }
