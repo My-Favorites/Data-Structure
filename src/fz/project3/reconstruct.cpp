@@ -69,7 +69,10 @@ bool compareNumber (Number i, Number j)
 
 void printNumberDeque (std::deque<Number> numbers) {
     for (int i = 0; i != numbers.size(); i++) {
-        std::cout << numbers[i].value << " ";
+        if (i > 0) {
+            std::cout << " ";
+        }
+        std::cout << numbers[i].value;
     }
     std::cout << std::endl;
 }
@@ -96,7 +99,6 @@ int main()
     int j = 0;
     while (pendingNumbers.size() > 0) {
         j++;
-        printf("j: %d, ps: %d, rs: %d\n", j, pendingNumbers.size(), rejectedNumbers.size());
         Number num = pendingNumbers.back();
         pendingNumbers.pop_back();
         if (isDependenciesMet(num)) {
@@ -109,23 +111,13 @@ int main()
                 for (int i = sizeBefore - 1; i > -1; --i) {
                     num = rejectedNumbers[i];
 
-                    std::cout << std::endl << std::endl;
-
-                    std::cout << "inputSequence: " << std::endl;
-                    printNumberDeque(inputSequence);
-
-                    std::cout << "rejectedNumbers: " << std::endl;
-                    printNumberDeque(rejectedNumbers);
-
                     if (isDependenciesMet(num)) {
-                        printf("found");
                         inputSequence.push_back(num);
                         positionIsTaken[num.index] = 1; // mark as taken
                         rejectedNumbers.erase(rejectedNumbers.begin() + i);
                     }
                 }
                 std::deque<Number>::size_type sizeAfter = rejectedNumbers.size();
-                printf("sizeBefore: %d, sizeAfter: %d\n", sizeBefore, sizeAfter);
                 if (sizeAfter == sizeBefore) {
                     break;
                 }
