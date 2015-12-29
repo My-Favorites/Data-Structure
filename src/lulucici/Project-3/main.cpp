@@ -1,9 +1,11 @@
 #include <cstdio>
 #include <queue>
 #include <list>
-#define MAX_SIZE 1001
+#define MAX_SIZE 2000
 using namespace std;
 int map[MAX_SIZE];
+
+int N, i, j;
 class Compare {
  public:
   bool operator() (int a, int b) {
@@ -14,14 +16,13 @@ typedef struct _vertex {
   int in_degree, out_degree;
   vector<int> edges_out;
 } vertex;
+vertex vertices[MAX_SIZE];
 vertex *init_vertex(vertex *p_vertex) {
   p_vertex->in_degree = 0;
   p_vertex->out_degree = 0;
   return p_vertex;
 }
 int main(int argc, char *argv[]) {
-  int N, i, j;
-  vertex vertices[MAX_SIZE];
   scanf("%d", &N);
   int number;
   for (i = 0; i < N; ++i) {
@@ -58,18 +59,18 @@ int main(int argc, char *argv[]) {
     }
   }
   int top;
-  vector<int> *p_edge;
+  int flag = 1;
   while (pqueue.size() > 0) {
-    count -= 1;
+//    count -= 1;
     top = pqueue.top();
-    if (count == 0) {
+    if (flag == 1) {
       printf("%d", map[top]);
-      break;
+//      break;
+      flag = 0;
     } else {
-      printf("%d ", map[top]);
+      printf(" %d", map[top]);
     }
     pqueue.pop();
-    p_edge = &vertices[top].edges_out;
     for (vector<int>::iterator it = vertices[top].edges_out.begin(); it != vertices[top].edges_out.end(); ++it) {
       vertices[*it].in_degree -= 1;
       if (vertices[*it].in_degree == 0) {
