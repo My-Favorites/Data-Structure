@@ -1,10 +1,9 @@
 #include <cstdio>
 #include <queue>
 #include <list>
-#define MAX_SIZE 2000
+#define MAX_SIZE 1000
 using namespace std;
 int map[MAX_SIZE];
-
 int N, i, j;
 class Compare {
  public:
@@ -30,11 +29,9 @@ int main(int argc, char *argv[]) {
     scanf("%d", map + i);
   }
   priority_queue<int, vector<int>, Compare> pqueue;
-  int count = 0;
   for (i = 0; i < N; ++i) {
     number = map[i];
     if (number != -1) {
-      count++;
       int place = number % N;
       if (place < i) {
         for (j = place; j < i; ++j) {
@@ -61,11 +58,9 @@ int main(int argc, char *argv[]) {
   int top;
   int flag = 1;
   while (pqueue.size() > 0) {
-//    count -= 1;
     top = pqueue.top();
     if (flag == 1) {
       printf("%d", map[top]);
-//      break;
       flag = 0;
     } else {
       printf(" %d", map[top]);
