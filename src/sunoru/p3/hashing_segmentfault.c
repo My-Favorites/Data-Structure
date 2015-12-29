@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define NEW(x, size) if (!(x=malloc(sizeof(*(x))*size))) exit(error("Malloc failed."))
+#define NEW(x, size) if (!(x=(int*)malloc(sizeof(*(x))*size))) exit(error("Malloc failed."))
 
 int
 error(char *msg)
@@ -33,7 +33,7 @@ init_graph()
     NEW(a, n);
     NEW(d, n);
     NEW(l, n);
-    NEW(map, n);
+    map = (int **)malloc(sizeof(*map) * n);
     for (i = 0; i < n; ++i) {
         scanf("%d", &a[i]);
         NEW(map[i], n);
