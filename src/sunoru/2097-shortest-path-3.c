@@ -53,45 +53,54 @@ ReadG()
 } /* details omitted */
 
 
-/* wrong function. need to be updated. */
 void
 ShortestDist(MGraph Graph, int dist[], int count[], Vertex S)
 {
+    Vertex *queue = malloc(sizeof(*queue) * Graph->Nv);
     bool *vi = malloc(sizeof(*vi) * Graph->Nv);
+    int head = 0, tail = 1;
     Vertex u, v;
-    bool f;
     int p;
     for (v = 0; v < Graph->Nv; ++v) {
-        dist[v] = -1;
+        dist[v] = INFINITY;
         count[v] = 0;
-        vi[v] = false;
     }
     dist[S] = 0;
     count[S] = 1;
-    for (; ;) {
-        f = false;
-        for (u = 0; u < Graph->Nv; ++u)
-            if (!vi[u] && dist[u] >= 0) {
-                f = true;
-                break;
-            }
-        if (!f)
-            break;
-        for (v = u + 1; v < Graph->Nv; ++v)
-            if (!vi[v] && dist[v] >= 0 && dist[v] < dist[u])
-                u = v;
-        vi[u] = true;
+    queue[0] = S;
+    vi[S] = true;
+    while (head != tail) {
+        u = queue[(head++) % Graph->Nv];
+        vi[u] = false;
         for (v = 0; v < Graph->Nv; ++v) {
             if (Graph->G[u][v] > 0) {
                 p = Graph->G[u][v] + dist[u];
-                if (dist[v] < 0 || p < dist[v]) {
+                if (p < dist[v]) {
                     dist[v] = p;
-                    count[v] = count[u];
-                } else if (dist[v] >= 0 && p == dist[v]) {
-                    count[v] += count[u];
+                    if (!vi[v]) {
+                        queue[(tail++) % Graph->Nv] = v;
+                        vi[v] = true;
+                    }
                 }
             }
         }
     }
-    free(vi);
+    head = 0; tail = 1; queue[0] = S; dist[S] = 0;
+    while (head != tail) {
+        u = queue[(head++) % Graph->Nv];
+        for (v = 0; v < Graph->Nv; ++v) {
+            if (Graph->G[u][v] > 0) {
+                if (Graph->G[u][v] + dist[u] == dist[v]) {
+                    queue[(tail++) % Graph->Nv] = v;
+                    count[v]++;
+                }
+            }
+        }
+    }
+    for (v = 0; v < Graph->Nv; ++v)
+        if (dist[v] == INFINITY) {
+            dist[v] = -1;
+            count[v] = 0;
+        }
 }
+
